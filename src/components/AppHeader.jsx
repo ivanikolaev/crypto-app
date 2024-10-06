@@ -1,5 +1,8 @@
-import React from 'react'
-import { Layout, Select, Space, Button } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Layout, Select, Space, Button, Modal, Drawer } from 'antd'
+import { useCrypto } from '../context/crypto-context';
+import CoinInfoModal from './CoinInfoModal';
+import AddAssetForm from './AddAssetForm';
 const { Header } = Layout
 
 const headerStyle = {
@@ -12,56 +15,72 @@ const headerStyle = {
     alignItems: 'center',
 }
 
-const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-
-const options = [
-    {
-        label: 'China',
-        value: 'china',
-        emoji: '🇨🇳',
-        desc: 'China (中国)',
-    },
-    {
-        label: 'USA',
-        value: 'usa',
-        emoji: '🇺🇸',
-        desc: 'USA (美国)',
-    },
-    {
-        label: 'Japan',
-        value: 'japan',
-        emoji: '🇯🇵',
-        desc: 'Japan (日本)',
-    },
-    {
-        label: 'Korea',
-        value: 'korea',
-        emoji: '🇰🇷',
-        desc: 'Korea (韩国)',
-    },
-];
-
 export default function AppHeader() {
+    const [select, setSelect] = useState(false)
+    const [coin, setCoin] = useState(null)
+    const [modal, setModal] = useState(false)
+    const [drawer, setDrawer] = useState(false)
+    const { crypto } = useCrypto();
+
+    useEffect(() => {
+        const keypress = (event) => {
+            if (event.key === '/')
+                setSelect((prev) => !prev)
+        }
+        document.addEventListener('keypress', keypress)
+        return () => document.removeEventListener('keypress', keypress)
+    }, [])
+
+    const handleSelect = (value) => {
+        console.log(`selected ${value}`);
+        setModal(true)
+        setCoin(crypto.find((coin) => coin.id === value))
+    };
+
     return (
         <Header style={headerStyle}>
             <Select
                 style={{
                     width: '250px'
                 }}
+                open={select}
+                onSelect={handleSelect}
+                onClick={() => setSelect((prev) => !prev)}
                 value="press / to open"
-                options={options}
+                options={crypto.map((coin) => ({
+                    value: coin.id,
+                    label: coin.id,
+                    icon: coin.icon,
+                }))}
                 optionRender={(option) => (
                     <Space>
-                        <span role="img" aria-label={option.data.label}>
-                            {option.data.emoji}
-                        </span>
-                        {option.data.desc}
+                        <img
+                            style={{ width: '20px' }}
+                            src={option.data.icon}
+                            alt={option.data.label}
+                        /> {option.data.label}
                     </Space>
                 )}
             />
-        <Button type='primary'>Add asset</Button>
+
+            <Button type='primary' onClick={() => setDrawer(true)}>Add asset</Button>
+
+            <Modal
+                open={modal}
+                onCancel={() => setModal(false)}
+                footer={null}
+            >
+                <CoinInfoModal coin={coin} />
+            </Modal>
+
+            <Drawer
+                width={600}
+                title="Add asset"
+                open={drawer}
+                onClose={() => setDrawer(false)}
+            >
+                <AddAssetForm />
+            </Drawer>
         </Header>
     )
 }
