@@ -78,8 +78,9 @@ export default function AppHeader() {
                 title="Add asset"
                 open={drawer}
                 onClose={() => setDrawer(false)}
+                destroyOnClose
             >
-                <AddAssetForm />
+                <AddAssetForm onClose={() => setDrawer(false)} />
             </Drawer>
         </Header>
     )

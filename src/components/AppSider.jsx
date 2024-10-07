@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Layout, Card, Statistic, List, Typography, Tag } from 'antd'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 import { capitalize } from '../utils'
-import CryptoContext from '../context/crypto-context'
+import { useCrypto } from '../context/crypto-context'
 
 const { Sider } = Layout
 
@@ -12,7 +12,7 @@ const siderStyle = {
 }
 
 export default function AppSider() {
-    const { assets } = useContext(CryptoContext)
+    const { assets } = useCrypto()
 
     return (
         <Sider width="25%" style={siderStyle}>
@@ -31,7 +31,6 @@ export default function AppSider() {
                         dataSource={[
                             { title: 'Total profit', value: asset.totalProfit, isTag: true },
                             { title: 'Asset amount', value: asset.amount, isPlain: true },
-                            // { title: 'Delta', value: asset.growPercent },
                         ]}
                         renderItem={(item) => (
                             <List.Item>
@@ -54,18 +53,6 @@ export default function AppSider() {
                     />
                 </Card>
             ))}
-
-
-            {/* <Card>
-                <Statistic
-                    title="Idle"
-                    value={9.3}
-                    precision={2}
-                    valueStyle={{ color: '#cf1322' }}
-                    prefix={<ArrowDownOutlined />}
-                    suffix="%"
-                />
-            </Card> */}
         </Sider>
     )
 }
