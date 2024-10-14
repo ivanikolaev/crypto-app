@@ -7,7 +7,7 @@ const { Content } = Layout
 
 const contentStyle = {
     textAlign: 'center',
-    minHeight: 'calc(100vh - 160px)',
+    minHeight: 'calc(100vh - 60px)',
     color: '#fff',
     backgroundColor: '#001529',
     padding: '1rem',
@@ -21,18 +21,25 @@ export default function AppContent() {
         return acc
     }, {})
 
+    let balance = +(assets
+        .map((asset) => asset.amount * cryptoPriceMap[asset.id])
+        .reduce((acc, value) => (acc += value), 0)
+        .toFixed(2))
+
     return (
         <Content style={contentStyle}>
             <Typography.Title level={3} style={{ textAlign: 'left', color: 'white' }}>
-                Portfolio: {' '}
-                {assets
-                    .map((asset) => asset.amount * cryptoPriceMap[asset.id])
-                    .reduce((acc, value) => (acc += value), 0)
-                    .toFixed(2)
-                }$
+                Balance: {balance}$
             </Typography.Title>
-            <PortfolioChart />
-            <AssetsTable />
+            {balance > 0 ? (
+                <>
+                    <PortfolioChart />
+                    <AssetsTable />
+                </>
+            ) : (
+                <></>
+            )}
+
         </Content>
     )
 }

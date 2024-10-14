@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { Layout, Spin } from 'antd'
 import AppHeader from './AppHeader'
 import AppSider from './AppSider'
-import AppFooter from './AppFooter'
 import AppContent from './AppContent'
 import CryptoContext from '../context/crypto-context'
 
@@ -19,7 +18,6 @@ export default function AppLayout() {
                 <AppSider />
                 <AppContent />
             </Layout>
-            <AppFooter />
         </Layout>
     )
 }

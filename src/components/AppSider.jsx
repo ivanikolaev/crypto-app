@@ -1,6 +1,6 @@
 import React from 'react'
-import { Layout, Card, Statistic, List, Typography, Tag } from 'antd'
-import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
+import { Layout, Card, Statistic, List, Typography, Tag, Flex, Button } from 'antd'
+import { ArrowDownOutlined, ArrowUpOutlined, DeleteOutlined } from '@ant-design/icons'
 import { capitalize } from '../utils'
 import { useCrypto } from '../context/crypto-context'
 
@@ -12,14 +12,25 @@ const siderStyle = {
 }
 
 export default function AppSider() {
-    const { assets } = useCrypto()
+    const { assets, deleteAsset } = useCrypto()
 
     return (
         <Sider width="25%" style={siderStyle}>
-            {assets.map(asset => (
+            {assets.map((asset) => (
                 <Card key={asset.id} style={{ marginBottom: '1rem' }}>
                     <Statistic
-                        title={capitalize(asset.id)}
+                        title={
+                            <Flex justify='space-between'>
+                                {capitalize(asset.id)}
+                                <Button danger style={{ width: 10 }} onClick={() => deleteAsset(asset)}>
+                                    <DeleteOutlined style={{
+                                        color: 'red',
+                                        padding: 4,
+                                        cursor: 'pointer',
+                                    }} />
+                                </Button>
+                            </Flex>
+                        }
                         value={asset.totalAmount}
                         precision={2}
                         valueStyle={{ color: asset.grow ? '#3f8600' : '#cf1322' }}

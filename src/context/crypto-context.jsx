@@ -21,6 +21,7 @@ export function CryptoContextProvider({ children }) {
                 growPercent: percentDelta(asset.price, coin.price),
                 totalAmount: asset.amount * coin.price,
                 totalProfit: asset.amount * (coin.price - asset.price),
+                name: coin.name,
                 ...asset,
             }
         })
@@ -43,7 +44,11 @@ export function CryptoContextProvider({ children }) {
         setAssets((prev) => mapAssets([...prev, newAsset], crypto))
     }
 
-    return <CryptoContext.Provider value={{ loading, crypto, assets, addAsset }}>
+    const deleteAsset = (asset) => {
+        setAssets((prev) => [...prev.filter((c) => c.id !== asset.id)])
+    }
+
+    return <CryptoContext.Provider value={{ loading, crypto, assets, addAsset, deleteAsset }}>
         {children}
     </CryptoContext.Provider>
 }
