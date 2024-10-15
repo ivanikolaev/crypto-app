@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  client:
+    build:
+      dockerfile: ./Dockerfile.client
+    ports:
+      - "5000:5000"
+
+  server:
+    build:
+      dockerfile: ./Dockerfile.server
+    restart: always
+    ports:
+      - "3000:3000"
