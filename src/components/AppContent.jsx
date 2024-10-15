@@ -28,7 +28,7 @@ export default function AppContent() {
 
     return (
         <Content style={contentStyle}>
-            <Typography.Title level={3} style={{ textAlign: 'left', color: 'white' }}>
+            <Typography.Title level={3} style={{ textAlign: 'left', color: 'antiquewhite' }}>
                 Balance: {balance}$
             </Typography.Title>
             {balance > 0 ? (
@@ -37,7 +37,9 @@ export default function AppContent() {
                     <AssetsTable />
                 </>
             ) : (
-                <></>
+                <Typography.Title level={3} style={{ textAlign: 'left', color: 'antiquewhite' }}>
+                    Please add your assets!
+                </Typography.Title>
             )}
 
         </Content>

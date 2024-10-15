@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, useContext } from 'react'
-import { FakeFetchCrypto, FetchAssets } from '../api'
+import { fetchCrypto, fetchAssets } from '../api'
 import { percentDelta } from '../utils'
 
 const CryptoContext = createContext({
@@ -30,8 +30,8 @@ export function CryptoContextProvider({ children }) {
     useEffect(() => {
         async function preload() {
             setLoading(true)
-            const { result } = await FakeFetchCrypto()
-            const assets = await FetchAssets()
+            const { result } = await fetchCrypto()
+            const assets = await fetchAssets()
 
             setAssets(mapAssets(assets, result))
             setCrypto(result)
@@ -40,12 +40,36 @@ export function CryptoContextProvider({ children }) {
         preload()
     }, [])
 
-    const addAsset = (newAsset) => {
+    const addAsset = async (newAsset) => {
         setAssets((prev) => mapAssets([...prev, newAsset], crypto))
+
+        try {
+            const response = await fetch('http://localhost:3000/assets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newAsset),
+            });
+
+            const addedAsset = await response.json();
+            return addedAsset;
+        } catch (error) {
+            console.error('POST asset error:', error);
+        }
     }
 
-    const deleteAsset = (asset) => {
+    const deleteAsset = async (asset) => {
         setAssets((prev) => [...prev.filter((c) => c.id !== asset.id)])
+
+        try {
+            const response = await fetch(`http://localhost:3000/assets/${asset.id}`, {
+                method: 'DELETE',
+            });
+
+        } catch (error) {
+            console.error('DELETE asset error:', error);
+        }
     }
 
     return <CryptoContext.Provider value={{ loading, crypto, assets, addAsset, deleteAsset }}>
