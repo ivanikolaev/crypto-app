@@ -44,7 +44,7 @@ export function CryptoContextProvider({ children }) {
         setAssets((prev) => mapAssets([...prev, newAsset], crypto))
 
         try {
-            const response = await fetch('http://localhost:3000/assets', {
+            const response = await fetch('https://crypto-app-db.onrender.com/assets', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export function CryptoContextProvider({ children }) {
         setAssets((prev) => [...prev.filter((c) => c.id !== asset.id)])
 
         try {
-            const response = await fetch(`http://localhost:3000/assets/${asset.id}`, {
+            const response = await fetch(`https://crypto-app-db.onrender.com/assets/${asset.id}`, {
                 method: 'DELETE',
             });
 

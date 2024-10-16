@@ -19,7 +19,7 @@ export async function fetchCrypto() {
 
 export async function fetchAssets() {
     try {
-        const response = await fetch('http://localhost:3000/assets');
+        const response = await fetch('https://crypto-app-db.onrender.com/assets');
         const assets = await response.json();
 
         const cryptoAssets = assets.map(asset => ({
